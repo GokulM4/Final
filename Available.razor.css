@@ -1,0 +1,98 @@
+/* DASHBOARD ROOM CARDS STYLING */
+
+.room-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 20px;
+    padding: 20px 0;
+}
+
+.room-card {
+    background: #fff;
+    border-radius: 12px;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.05);
+    padding: 16px;
+    transition: transform 0.2s ease-in-out;
+}
+
+.room-card:hover {
+    transform: translateY(-4px);
+}
+
+.room-image {
+    background: #f0f0f0;
+    height: 120px;
+    border-radius: 8px;
+    margin-bottom: 12px;
+}
+
+.room-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 8px;
+}
+
+.room-header h5 {
+    margin: 0;
+    font-weight: 600;
+}
+
+.badge {
+    font-size: 0.75rem;
+    padding: 4px 8px;
+    border-radius: 12px;
+    font-weight: 600;
+}
+
+.bg-success {
+    background-color: #28a745;
+    color: white;
+}
+
+.bg-danger {
+    background-color: #dc3545;
+    color: white;
+}
+
+p {
+    margin: 4px 0;
+    font-size: 0.9rem;
+    color: #333;
+}
+
+.text-danger {
+    color: #dc3545;
+}
+
+.btn {
+    margin-top: 10px;
+    padding: 10px;
+    font-weight: 600;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: background-color 0.2s ease-in-out;
+}
+
+.btn-primary {
+    background-color: #2e52c4;
+    color: white;
+}
+
+.btn-primary:hover {
+    background-color: #1f3da0;
+}
+
+.btn-secondary {
+    background-color: #999;
+    color: white;
+    cursor: not-allowed;
+}
+
+/* Optional: Section title */
+.section-title {
+    font-size: 1.25rem;
+    font-weight: 600;
+    margin-top: 20px;
+}

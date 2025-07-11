@@ -1,0 +1,80 @@
+@page "/"
+@rendermode InteractiveServer
+@using System.ComponentModel.DataAnnotations
+@using Microsoft.AspNetCore.Components.Forms
+@using EditForm = Microsoft.AspNetCore.Components.Forms.EditForm;
+@inject NavigationManager Navigation
+@inject IJSRuntime JS
+
+<EditForm Model="@login"
+          OnValidSubmit="@HandleValidSubmit"
+          FormName="LoginForm"
+          EnableEnhancedForm="false">
+    <DataAnnotationsValidator />
+
+    <div class="form-container">
+        <h3>Login</h3>
+        
+        <label>Username:</label><br />
+        <InputText @bind-Value="login.USERNAME" class="form-control" />
+        <ValidationMessage For="@(() => login.USERNAME)" />
+        <br />
+
+        <label>Password:</label><br />
+        <InputText @bind-Value="login.PASSWORD" class="form-control" type="password" />
+        <ValidationMessage For="@(() => login.PASSWORD)" />
+        <br />
+
+        <button type="submit">Login</button>
+        <p>
+            <a href="/Signup" class="btn btn-link">Sign up</a>
+        </p>
+    </div>
+</EditForm>
+
+@code {
+    private LoginModel login = new();
+
+    private async void HandleValidSubmit()
+    {
+        var json = await JS.InvokeAsync<string>("localStorage.getItem", "users");
+
+        // ✅ FIX: Safely deserialize and ensure users list is not null
+        List<User> users = new();
+        if (!string.IsNullOrWhiteSpace(json))
+        {
+            var deserialized = System.Text.Json.JsonSerializer.Deserialize<List<User>>(json);
+            if (deserialized is not null)
+            {
+                users = deserialized;
+            }
+        }
+
+        var matchingUser = users.FirstOrDefault(u =>
+            u?.Username == login.USERNAME && u?.Password == login.PASSWORD);
+
+        if (matchingUser is not null)
+        {
+            Navigation.NavigateTo("/RoomDashboard");
+        }
+        else
+        {
+            await JS.InvokeVoidAsync("alert", "Invalid username or password.");
+        }
+    }
+
+    public class LoginModel
+    {
+        [Required(ErrorMessage = "Username is required")]
+        public string USERNAME { get; set; } = string.Empty;
+
+        [Required(ErrorMessage = "Password is required")]
+        public string PASSWORD { get; set; } = string.Empty;
+    }
+
+    public class User
+    {
+        public string? Username { get; set; }
+        public string? Password { get; set; }
+    }
+}

@@ -1,0 +1,114 @@
+@* @page "/Available"
+<!-- Room Cards -->
+<h4 class="section-title">Meeting Rooms</h4>
+<div class="room-grid">
+        <div class="room-card available">
+        <div class="room-image"></div>
+        <div class="room-header">
+            <h5>Conference Room A</h5>
+            <span class="badge bg-success">Available</span>
+        </div>
+        <p><i class="bi bi-people"></i> Up to 12 people</p>
+        <p><i class="bi bi-geo-alt"></i> Floor 1, Wing A</p>
+        <p><i class="bi bi-clock"></i> Next: 2:00 PM - 3:00 PM</p>
+        <NavLink class="btn btn-primary w-100" href="/RoomBooking">Book Now</NavLink>
+    </div>
+
+    <div class="room-card inuse">
+        <div class="room-image"></div>
+        <div class="room-header">
+            <h5>Meeting Room B</h5>
+            <span class="badge bg-danger">In Use</span>
+        </div>
+        <p><i class="bi bi-people"></i> Up to 6 people</p>
+        <p><i class="bi bi-geo-alt"></i> Floor 2, Wing B</p>
+        <p class="text-danger"><i class="bi bi-clock-fill"></i> Current: 10:00 AM - 11:30 AM</p>
+        <p><i class="bi bi-clock"></i> Next: 2:30 PM - 4:00 PM</p>
+        <button class="btn btn-secondary w-100" disabled>Unavailable</button>
+    </div>
+
+    <div class="room-card available">
+        <div class="room-image"></div>
+        <div class="room-header">
+            <h5>Meeting Room C</h5>
+            <span class="badge bg-success">Available</span>
+        </div>
+        <p><i class="bi bi-people"></i> Up to 9 people</p>
+        <p><i class="bi bi-geo-alt"></i> Floor 1, Wing A</p>
+        <p><i class="bi bi-clock"></i> Next: 2:00 PM - 3:00 PM</p>
+        <NavLink class="btn btn-primary w-100" href="/RoomBooking">Book Now</NavLink>
+    </div>
+
+    <div class="room-card available">
+        <div class="room-image"></div>
+        <div class="room-header">
+            <h5>Meeting Room D</h5>
+            <span class="badge bg-success">Available</span>
+        </div>
+        <p><i class="bi bi-people"></i> Up to 8 people</p>
+        <p><i class="bi bi-geo-alt"></i> Floor 1, Wing A</p>
+        <p><i class="bi bi-clock"></i> Next: 2:00 PM - 3:00 PM</p>
+        <NavLink class="btn btn-primary w-100" href="/RoomBooking">Book Now</NavLink>
+    </div>
+    
+</div> *@
+
+
+@page "/Available"
+@inject NavigationManager NavManager
+
+
+<!-- Room Cards -->
+<h4 class="section-title">Meeting Rooms</h4>
+<div class="d-flex justify-content-end" style="padding: 1rem 2rem;">
+    <p><NavLink class="btn btn-primary" href="/RoomDashboard">Back</NavLink></p>
+</div>
+<div class="room-grid">
+    <div class="room-card available">
+        <div class="room-image"></div>
+        <div class="room-header">
+            <h5>Conference Room A</h5>
+            <span class="badge bg-success">Available</span>
+        </div>
+        <p><i class="bi bi-people"></i> Up to 12 people</p>
+        <p><i class="bi bi-geo-alt"></i> Floor 1, Wing A</p>
+        <p><i class="bi bi-clock"></i></p>
+        <NavLink class="btn btn-primary w-100" href="/RoomBooking">Book Now</NavLink>
+    </div>
+
+    <div class="room-card inuse">
+        <div class="room-image"></div>
+        <div class="room-header">
+            <h5>Meeting Room B</h5>
+            <span class="badge bg-success">Available</span>
+        </div>
+        <p><i class="bi bi-people"></i> Up to 6 people</p>
+        <p><i class="bi bi-geo-alt"></i> Floor 1, Wing B</p>
+        <p><i class="bi bi-clock"></i></p>
+        <NavLink class="btn btn-primary w-100" href="/RoomBooking">Book Now</NavLink>
+    </div>
+
+    <div class="room-card available">
+        <div class="room-image"></div>
+        <div class="room-header">
+            <h5>Meeting Room C</h5>
+            <span class="badge bg-success">Available</span>
+        </div>
+        <p><i class="bi bi-people"></i> Up to 9 people</p>
+        <p><i class="bi bi-geo-alt"></i> Floor 2, Wing A</p>
+        <p><i class="bi bi-clock"></i></p>
+        <NavLink class="btn btn-primary w-100" href="/RoomBooking">Book Now</NavLink>
+    </div>
+
+    <div class="room-card available">
+        <div class="room-image"></div>
+        <div class="room-header">
+            <h5>Meeting Room D</h5>
+            <span class="badge bg-success">Available</span>
+        </div>
+        <p><i class="bi bi-people"></i> Up to 8 people</p>
+        <p><i class="bi bi-geo-alt"></i> Floor 2, Wing A</p>
+        <p><i class="bi bi-clock"></i></p>
+        <NavLink class="btn btn-primary w-100" href="/RoomBooking">Book Now</NavLink>
+    </div>
+</div>

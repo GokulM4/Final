@@ -1,0 +1,78 @@
+@page "/Signup"
+@rendermode InteractiveServer
+@using System.ComponentModel.DataAnnotations
+@using Microsoft.AspNetCore.Components.Forms
+@using EditForm = Microsoft.AspNetCore.Components.Forms.EditForm;
+@inject NavigationManager Navigation
+@inject IJSRuntime JS
+
+<h3>Sign Up</h3>
+
+<EditForm Model="@signup" OnValidSubmit="@HandleValidSubmit">
+    <DataAnnotationsValidator />
+
+    <div class="form-container">
+        <label>Username:</label><br />
+        <InputText @bind-Value="signup.USERNAME" class="form-control" />                                                                                                        
+        <ValidationMessage For="@(() => signup.USERNAME)" />
+        <br />
+
+        <label>Password:</label><br />
+        <InputText @bind-Value="signup.PASSWORD" type="password" class="form-control" />
+        <ValidationMessage For="@(() => signup.PASSWORD)" />
+        <br />
+
+        <button type="submit">Sign Up</button>
+        <a href="/" class="secondary-button">Back to Login</a>
+    </div>
+</EditForm>
+
+@code {
+    private SignupModel signup = new();
+
+    private async Task HandleValidSubmit()
+    {
+        // 🛠 Fix: Handle null values from localStorage gracefully
+        var json = await JS.InvokeAsync<string>("localStorage.getItem", "users");
+
+        List<User> users = new();
+        if (!string.IsNullOrWhiteSpace(json))
+        {
+            var deserialized = System.Text.Json.JsonSerializer.Deserialize<List<User>>(json);
+            if (deserialized is not null)
+            {
+                users = deserialized;
+            }
+        }
+
+        // 🛠 Fix: Ensure 'users' is not null when calling .Any()
+        if (users.Any(u => u?.Username == signup.USERNAME))
+        {
+            await JS.InvokeVoidAsync("alert", "Username already exists.");
+            return;
+        }
+
+        users.Add(new User { Username = signup.USERNAME, Password = signup.PASSWORD });
+
+        var updatedJson = System.Text.Json.JsonSerializer.Serialize(users);
+        await JS.InvokeVoidAsync("localStorage.setItem", "users", updatedJson);
+
+        Navigation.NavigateTo("/");
+    }
+
+    public class SignupModel
+    {
+        [Required(ErrorMessage = "Username is required")]                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                     
+        public string USERNAME { get; set; } = string.Empty;
+
+        [Required(ErrorMessage = "Password is required")]
+        public string PASSWORD { get; set; } = string.Empty;
+    }
+
+    public class User
+    {
+        // ✅ Fix for CS8618: Declare properties as nullable or initialize them
+        public string Username { get; set; } = string.Empty;
+        public string Password { get; set; } = string.Empty;
+    }
+}

@@ -1,0 +1,250 @@
+﻿@page "/RoomBooking"
+@attribute [StreamRendering]
+@using EditForm = Microsoft.AspNetCore.Components.Forms.EditForm
+
+
+@rendermode InteractiveServer
+@inject IJSRuntime JS
+@using System.Text.Json
+@using System.ComponentModel.DataAnnotations
+
+<h3 class="mt-4">🏢 Meeting Room Booking</h3>
+
+<EditForm Model="@roomModel" OnValidSubmit="HandleValidSubmit">
+    <DataAnnotationsValidator />
+    <ValidationSummary />
+
+    <div class="container mt-4">
+        <div class="row g-4">
+
+            <!-- Room Name -->
+            <!-- Room Name -->
+<div class="col-md-6">
+    <label class="form-label">🏷 Room Name <span class="text-danger">*</span></label>
+    <select class="form-select" @bind="roomModel.RoomName">
+        <option value="">-- Select Room --</option>
+        <option>Conference Room A</option>
+        <option>Meeting Room B</option>
+        <option>Meeting Room C</option>
+        <option>Meeting Room D</option>
+    </select>
+    <ValidationMessage For="@(() => roomModel.RoomName)" />
+</div>
+
+
+            <!-- Floor -->
+            <div class="col-md-6">
+                <label class="form-label">🏢 Floor <span class="text-danger">*</span></label>
+                <select class="form-select" @bind="roomModel.Floor">
+                    <option value="">-- Select Floor --</option>
+                    <option>1st Floor</option>
+                    <option>2nd Floor</option>
+                    <option>3rd Floor</option>
+                    <option>4th Floor</option>
+                    <option>5th Floor</option>
+                </select>
+                <ValidationMessage For="@(() => roomModel.Floor)" />
+            </div>
+
+            <!-- Team Name -->
+            <div class="col-md-6">
+                <label class="form-label">👥 Team Name <span class="text-danger">*</span></label>
+                <input type="text" class="form-control" @bind="roomModel.TeamName" />
+                <ValidationMessage For="@(() => roomModel.TeamName)" />
+            </div>
+
+            <!-- Purpose -->
+            <div class="col-md-6">
+                <label class="form-label">📌 Purpose</label>
+                <input type="text" class="form-control" @bind="roomModel.Purpose" />
+            </div>
+
+            <!-- Booking Slot -->
+            <div class="col-md-6">
+                <label class="form-label">🕓 Time Slot</label>
+                <input type="text" class="form-control" placeholder="e.g. 2:00 PM - 3:00 PM" @bind="roomModel.BookingSlot" />
+            </div>
+
+            <!-- Booking Date -->
+            <div class="col-md-6">
+                <label class="form-label">📅 Booking Date <span class="text-danger">*</span></label>
+                <input type="date" class="form-control" @bind="roomModel.BookingDate" />
+                <ValidationMessage For="@(() => roomModel.BookingDate)" />
+            </div>
+
+            <!-- Submit Button -->
+            <div class="col-12">
+                <button class="btn btn-primary w-100" type="submit">
+                    @(isEditMode ? "✏ Update Booking" : "✅ Book Room")
+                </button>
+            </div>
+          
+            @if (showConfirmation)
+            {
+                <div class="col-12">
+                    <div class="alert alert-success mt-3 text-center">
+                        ✔ Booking saved!
+                    </div>
+                </div>
+            }
+        </div>
+
+        <!-- Booking Table -->
+        @if (bookingList.Any())
+        {
+            <h4 class="mt-5">📋 Booked Rooms</h4>
+            <div class="table-responsive">
+                <table class="table table-bordered table-striped mt-2">
+                    <thead class="table-dark">
+                        <tr>
+                            <th>Room</th>
+                            <th>Floor</th>
+                            <th>Team</th>
+                            <th>Purpose</th>
+                            <th>Time Slot</th>
+                            <th>Date</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var booking in bookingList.OrderBy(b => b.BookingDate))
+                        {
+                            <tr>
+                                <td>@booking.RoomName</td>
+                                <td>@booking.Floor</td>
+                                <td>@booking.TeamName</td>
+                                <td>@(string.IsNullOrWhiteSpace(booking.Purpose) ? "-" : booking.Purpose)</td>
+                                <td>@booking.BookingSlot</td>
+                                <td>@booking.BookingDate.ToString("yyyy-MM-dd")</td>
+                                <td>
+                                    <button type="button" class="btn btn-sm btn-warning me-1" @onclick="() => EditBooking(booking)">Edit</button>
+                                    <button type="button" class="btn btn-sm btn-danger" @onclick="() => DeleteBooking(booking)">Delete</button>
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        }
+    </div>
+</EditForm>
+
+@code {
+    private const string StorageKey = "roomBookings";
+
+    private RoomModel roomModel = new();
+    private List<RoomEntry> bookingList = new();
+    private bool showConfirmation = false;
+    private bool isEditMode = false;
+    private DateTime? editingTimestamp = null;
+
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (firstRender)
+        {
+            await LoadBookingsFromStorage();
+        }
+    }
+
+    private async Task LoadBookingsFromStorage()
+    {
+        var json = await JS.InvokeAsync<string>("localStorage.getItem", StorageKey);
+        if (!string.IsNullOrWhiteSpace(json))
+        {
+            bookingList = JsonSerializer.Deserialize<List<RoomEntry>>(json) ?? new();
+        }
+        StateHasChanged();
+    }
+
+    private async Task HandleValidSubmit()
+    {
+        if (isEditMode && editingTimestamp != null)
+        {
+            var existing = bookingList.FirstOrDefault(b => b.Timestamp == editingTimestamp);
+            if (existing != null)
+            {
+                existing.RoomName = roomModel.RoomName;
+                existing.Floor = roomModel.Floor;
+                existing.TeamName = roomModel.TeamName;
+                existing.Purpose = roomModel.Purpose;
+                existing.BookingSlot = roomModel.BookingSlot;
+                existing.BookingDate = roomModel.BookingDate;
+            }
+            isEditMode = false;
+        }
+        else
+        {
+            var newEntry = new RoomEntry
+            {
+                RoomName = roomModel.RoomName,
+                Floor = roomModel.Floor,
+                TeamName = roomModel.TeamName,
+                Purpose = roomModel.Purpose,
+                BookingSlot = roomModel.BookingSlot,
+                BookingDate = roomModel.BookingDate,
+                Timestamp = DateTime.Now
+            };
+            bookingList.Add(newEntry);
+        }
+
+        bookingList = bookingList.OrderBy(b => b.BookingDate).ToList();
+
+        var json = JsonSerializer.Serialize(bookingList);
+        await JS.InvokeVoidAsync("localStorage.setItem", StorageKey, json);
+
+        showConfirmation = true;
+        StateHasChanged();
+        await Task.Delay(2000);
+        showConfirmation = false;
+        await InvokeAsync(StateHasChanged);
+
+        roomModel = new();
+        editingTimestamp = null;
+    }
+
+    private void EditBooking(RoomEntry booking)
+    {
+        roomModel = new RoomModel
+        {
+            RoomName = booking.RoomName,
+            Floor = booking.Floor,
+            TeamName = booking.TeamName,
+            Purpose = booking.Purpose,
+            BookingSlot = booking.BookingSlot,
+            BookingDate = booking.BookingDate
+        };
+        editingTimestamp = booking.Timestamp;
+        isEditMode = true;
+    }
+
+    private async Task DeleteBooking(RoomEntry booking)
+    {
+        bookingList.Remove(booking);
+        var json = JsonSerializer.Serialize(bookingList);
+        await JS.InvokeVoidAsync("localStorage.setItem", StorageKey, json);
+        StateHasChanged();
+    }
+
+    public class RoomModel
+    {
+        [Required(ErrorMessage = "Room Name is required")]
+        public string RoomName { get; set; } = string.Empty;
+
+        [Required(ErrorMessage = "Floor is required")]
+        public string Floor { get; set; } = string.Empty;
+
+        [Required(ErrorMessage = "Team Name is required")]
+        public string TeamName { get; set; } = string.Empty;
+
+        public string Purpose { get; set; } = string.Empty;
+        public string BookingSlot { get; set; } = string.Empty;
+
+        [Required(ErrorMessage = "Booking Date is required")]
+        public DateTime BookingDate { get; set; } = DateTime.Today;
+    }
+
+    private class RoomEntry : RoomModel
+    {
+        public DateTime Timestamp { get; set; }
+    }
+}

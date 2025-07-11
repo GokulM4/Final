@@ -1,0 +1,137 @@
+@page "/RoomDashboard"
+@inject NavigationManager NavManager
+
+<div class="dashboard-header">
+    <div class="branding">
+        <i class="bi bi-calendar3 dashboard-icon"></i>
+
+        <div class="branding-text">
+            <h1>Room Manager</h1>
+            <p>Office Meeting Room System</p>
+        </div>
+    </div>
+
+    <div class="datetime">
+        <h6>@DateTime.Now.ToString("M/d/yyyy")</h6>
+        <small>@DateTime.Now.ToString("hh:mm tt")</small>
+
+        <div class="dashboard-actions">
+            @* <button class="btn btn-secondary" @onclick="GoBack">Back</button> *@
+            @* <button class="btn btn-primary" @onclick="Logout">Logout</button> *@
+              <p><NavLink class="btn btn-primary" href="/Signup">Logout</NavLink></p>
+        </div>
+    </div>
+</div>
+
+<!-- Nav Tabs -->
+<div class="nav-tabs mb-4">
+    <div class="tab active">Dashboard</div>
+</div>
+
+<!-- Summary Cards -->
+<div class="dashboard-grid">
+    <div class="card-widget">
+        <div class="icon-container bg-green">
+            <i class="bi bi-people-fill"></i>
+        </div>
+        <div class="card-details">
+            <h2>3</h2>
+            <p><NavLink href="/Available">Available Now</NavLink></p>
+        </div>
+    </div>
+
+    <div class="card-widget">
+        <div class="icon-container bg-red">
+            <i class="bi bi-clock-fill"></i>
+        </div>
+        <div class="card-details">
+            <h2>1</h2>
+            <p><NavLink href="/Available">In Use</NavLink></p>
+        </div>
+    </div>
+
+    <div class="card-widget">
+        <div class="icon-container bg-blue">
+            <i class="bi bi-geo-alt-fill"></i>
+        </div>
+        <div class="card-details">
+            <h2>4</h2>
+            <p>Total Rooms</p>
+        </div>
+    </div>
+
+    <div class="card-widget">
+        <div class="icon-container bg-purple">
+            <i class="bi bi-calendar-event-fill"></i>
+        </div>
+        <div class="card-details">
+            <h2>12</h2>
+            <p>Today's Meetings</p>
+        </div>
+    </div>
+</div>
+
+<!-- Room Cards -->
+<h4 class="section-title">Meeting Rooms</h4>
+<div class="room-grid">
+    <div class="room-card available">
+        <div class="room-image"></div>
+        <div class="room-header">
+            <h5>Conference Room A</h5>
+            <span class="badge bg-success">Available</span>
+        </div>
+        <p><i class="bi bi-people"></i> Up to 12 people</p>
+        <p><i class="bi bi-geo-alt"></i> Floor 1, Wing A</p>
+        <p><i class="bi bi-clock"></i></p>
+        <NavLink class="btn btn-primary w-100" href="/Available">Book Now</NavLink>
+    </div>
+
+    <div class="room-card inuse">
+        <div class="room-image"></div>
+        <div class="room-header">
+            <h5>Meeting Room B</h5>
+            <span class="badge bg-success">Available</span>
+        </div>
+        <p><i class="bi bi-people"></i> Up to 6 people</p>
+        <p><i class="bi bi-geo-alt"></i> Floor 1, Wing B</p>
+        <p><i class="bi bi-clock"></i></p>
+        <NavLink class="btn btn-primary w-100" href="/Available">Book Now</NavLink>
+    </div>
+
+    <div class="room-card available">
+        <div class="room-image"></div>
+        <div class="room-header">
+            <h5>Meeting Room C</h5>
+            <span class="badge bg-success">Available</span>
+        </div>
+        <p><i class="bi bi-people"></i> Up to 9 people</p>
+        <p><i class="bi bi-geo-alt"></i> Floor 2, Wing A</p>
+        <p><i class="bi bi-clock"></i></p>
+        <NavLink class="btn btn-primary w-100" href="/Available">Book Now</NavLink>
+    </div>
+
+    <div class="room-card available">
+        <div class="room-image"></div>
+        <div class="room-header">
+            <h5>Meeting Room D</h5>
+            <span class="badge bg-success">Available</span>
+        </div>
+        <p><i class="bi bi-people"></i> Up to 8 people</p>
+        <p><i class="bi bi-geo-alt"></i> Floor 2, Wing A</p>
+        <p><i class="bi bi-clock"></i></p>
+        <NavLink class="btn btn-primary w-100" href="/Available">Book Now</NavLink>
+    </div>
+</div>
+
+ @code {
+    private void GoBack()
+    {
+        NavManager.NavigateTo("/");
+    }
+
+    private void Logout()
+    {
+        // Clear localStorage or session storage if applicable
+        NavManager.NavigateTo("/", forceLoad: true);
+    }
+} 
