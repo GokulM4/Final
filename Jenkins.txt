@@ -1,0 +1,162 @@
+What is Jenkins?
+   Jenkins is an open-source automation server written in Java that helps developers automate the building, testing, and deployment of applications.
+In simple words:
+   Jenkins automatically does repetitive tasks like building your code, running tests, and deploying your app to servers whenever you make changes.
+
+Why Jenkins is Used
+its mainly used for CI/CD —
+that means Continuous Integration and Continuous Deployment/Delivery.
+
+Process	Meaning	Jenkins Role
+
+Continuous Integration (CI)  Developers frequently merge code into a shared repo.  Jenkins automatically builds and tests each commit to catch issues early.
+Continuous Deployment (CD)  Automatically delivering code to production or test environments. Jenkins automates the deployment steps after a successful build.
+
+How Jenkins Works
+
+You commit code → e.g., to GitHub
+Jenkins detects the change → via a webhook or schedule
+It builds your project → compiles the code
+Runs tests → unit tests, integration tests, etc.
+Deploys your application → to a server, Docker container, or cloud platform
+It does all this using pipelines (series of automated steps written in a Jenkins file).
+
+Key Features:
+
+Open Source & free
+Integration with Git, GitHub, Bitbucket, Docker, Maven, etc.
+Thousands of plugins (e.g., Slack, AWS, Azure, Kubernetes)
+Build pipelines using GUI or code (Jenkinsfile)
+Dashboard to monitor build status and history
+
+Where Jenkins Is Used
+
+Area	                Usage Example
+
+Software Development	Automating builds & tests after each code push
+DevOps Pipelines	Continuous Integration & Deployment
+Server Automation	Deploying apps on staging/production servers
+Cloud Infrastructure	Integration with Docker, Kubernetes, AWS
+Monitoring & Reporting	Build/test status dashboards and notifications
+
+What is a Jenkins Pipeline?
+
+A pipeline in Jenkins is a set of automated steps that define how your code moves from development to production — from build → test → deploy.
+It is written using a special syntax called Groovy (in a file named Jenkinsfile).
+
+Why We Use Pipelines?
+
+Without pipelines, you’d have to click buttons manually for each build or deployment.
+
+With a pipeline:
+
+Everything is automated
+You can version-control the pipeline (store it in GitHub)
+Easy to modify, debug, or repeat
+It makes CI/CD (Continuous Integration / Deployment) possible
+
+How Jenkins Pipeline Works (Simple Flow)
+
+Developer pushes code to GitHub/GitLab/Bitbucket
+Jenkins detects change via webhook or polling
+Jenkins runs pipeline steps defined in Jenkinsfile:
+      Build: Compile code
+      Test: Run automated tests
+      Deploy: Push code to server or container
+Jenkins reports results on dashboard (✅ success / ❌ failed)
+
+Two Types of Jenkins Pipelines
+
+Declarative Pipeline (Recommended)
+
+Easier to write and read
+Uses structured syntax
+
+Advantages
+
+Clean structure (pipeline → stages → steps)
+Easy to debug and maintain
+
+Scripted Pipeline
+
+More flexible, allows complex logic (loops, conditions)
+Written in pure Groovy script
+
+Advantages
+
+Powerful scripting capabilities
+Useful for advanced automation or dynamic builds
+
+Key Components of a Jenkins Pipeline
+
+Component	Description
+Agent	       Where Jenkins runs the pipeline (e.g., on the Jenkins master or a node)
+Stage	       A block that represents a major phase (Build, Test, Deploy)
+Step	       The actual command that Jenkins executes inside a stage
+Node	       A machine that runs the pipeline (could be local or remote)
+Post	       Defines what happens after the pipeline (e.g., send email if failed)
+
+Pipeline Execution Example
+
+Step	Description
+Stage 1	Jenkins pulls code from GitHub
+Stage 2	Builds with maven or npm
+Stage 3	Runs test scripts
+Stage 4	Deploys to a web server
+Stage 5	Sends Slack/Email notification
+
+What Are Jenkins Plugins?
+
+In Jenkins, a plugin is an add-on or extension that adds extra functionality to Jenkins.
+
+Why Plugins Are Needed
+
+Jenkins out-of-the-box is minimal. Plugins allow Jenkins to:
+   Integrate with version control systems (Git, GitHub, Bitbucket)
+   Support build tools (Maven, Gradle, npm)
+   Communicate with deployment platforms (Docker, AWS, Azure)
+   Add notifications (Slack, Email)
+   Visualize builds and reports
+Essentially, if Jenkins can’t do it natively, a plugin probably can.
+
+Jenkins Job Configuration
+
+A Job (also called a “Project”) in Jenkins defines what automation to perform.
+
+Types of Jobs
+
+Freestyle Project – Traditional job where you manually define build steps (commands, scripts, etc.).
+Pipeline Project – Uses a Jenkinsfile written in Groovy to define steps as code.
+Multi-Configuration (Matrix) – For testing multiple OS/Java versions.
+Multibranch Pipeline – Automatically creates pipelines for each Git branch.
+
+Typical Job Configuration Steps
+
+1.Source Code Management (SCM):
+	Connect Jenkins to your repo (Git, SVN, etc.).
+	Example: GitHub URL → authentication → select branch.
+
+2.Build Triggers:
+	When to run the job?
+		Manual (click “Build Now”)
+		Automatically via:
+			Poll SCM (check Git repo periodically)
+			Webhook (triggered when code is pushed)
+			Scheduled build (CRON style)
+
+3.Build Environment:
+	Set up environment variables, clean workspace, etc.
+
+4.Build Steps:
+	Define how to build the code:
+		Run shell commands (Linux) or batch commands (Windows)
+		Use Maven/Gradle for Java, npm for Node.js, etc.
+		Example:
+		"mvn clean install"
+
+5.Post-build Actions:
+	Actions after build success or failure:
+		Archive artifacts (e.g., .jar, .war, .zip)
+		Send email/slack notification
+		Deploy to a server or cloud
+
