@@ -1,0 +1,47 @@
+What is Jenkins?
+   Jenkins is an open-source automation server written in Java that helps developers automate the building, testing, and deployment of applications.
+In simple words:
+   Jenkins automatically does repetitive tasks like building your code, running tests, and deploying your app to servers whenever you make changes.
+
+Why Jenkins is Used
+its mainly used for CI/CD —
+that means Continuous Integration and Continuous Deployment/Delivery.
+
+Process	Meaning	Jenkins Role
+
+Continuous Integration (CI)  Developers frequently merge code into a shared repo.  Jenkins automatically builds and tests each commit to catch issues early.
+
+Continuous Deployment (CD)  Automatically delivering code to production or test environments. Jenkins automates the deployment steps after a successful build.
+
+How Jenkins Works
+
+You commit code → e.g., to GitHub
+
+Jenkins detects the change → via a webhook or schedule
+
+It builds your project → compiles the code
+
+Runs tests → unit tests, integration tests, etc.
+
+Deploys your application → to a server, Docker container, or cloud platform
+
+It does all this using pipelines (series of automated steps written in a Jenkins file).
+
+Key Features:
+
+Open Source & free
+
+Integration with Git, GitHub, Bitbucket, Docker, Maven, etc.
+
+Thousands of plugins (e.g., Slack, AWS, Azure, Kubernetes)
+
+Build pipelines using GUI or code (Jenkinsfile)
+
+Dashboard to monitor build status and history
+
+
+
+
+
+
+
